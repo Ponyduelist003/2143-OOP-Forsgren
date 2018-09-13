@@ -6,6 +6,7 @@ class myVector{
 private:
   int *theVector;
   int vSize;
+  int initSize;
   int slotsFull = 0;
   double percentFull = 0;
 public:
@@ -13,5 +14,6 @@ public:
   myVector();
   void push_back(int val);
   int pop_back();
+  void trim_vector();
   void print();
 };
