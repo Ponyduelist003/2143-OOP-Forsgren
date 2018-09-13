@@ -6,7 +6,12 @@ class myVector{
 private:
   int *theVector;
   int vSize;
+  int slotsFull = 0;
+  double percentFull = 0;
 public:
   myVector(int size);
+  myVector();
+  void push_back(int val);
+  int pop_back();
   void print();
 };
