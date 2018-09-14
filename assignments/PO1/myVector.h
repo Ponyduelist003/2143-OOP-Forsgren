@@ -14,6 +14,6 @@ public:
   myVector();
   void push_back(int val);
   int pop_back();
-  void trim_vector();
+  int size();
   void print();
 };
