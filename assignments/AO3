@@ -3,20 +3,30 @@ September 28th, 2018
 Class: 2143 OOP
 
 Class:
+  An Abstract Data Type which represents the data and behavior of a collection of similar objects.
 
 Object:
+  The individual instance of a class. 
 
 Method:
+  A procedure or function associated with a class and invoked in a message passing style. 
 
 Abstraction:
+  A procedute of problem solving by which details are grouped into a singular concept, which then simplifies the problem by 
+  trimming all unneccesary information.
 
 Encapsulation:
+  The technique by which information is hidden within a structure, such as a class containing privatized data.
 
 Polymorphism:
+  The quality of a function, variable, or data type to take on and utilize many different values.
 
 Overloading:
+  A procedure, function, method, or operator which has been defined multiple times over
+  to allow for the input of many different data types.
 
 Attributes/Properties:
+  
 
 Class Variable:
 
