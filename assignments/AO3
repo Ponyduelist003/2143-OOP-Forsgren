@@ -26,16 +26,22 @@ Overloading:
   to allow for the input of many different data types.
 
 Attributes/Properties:
-  
+ 
 
 Class Variable:
-
+  A variable shared by all instances of a class.
+  
 Instance Variable:
+  An internal variable maintained by a specific instance of a class.
 
 Member Variable:
+  
 
 Inheritance:
+  The property of objects allowing them to access data and methods from previously defined classes.
 
 Multiple Inheritance:
+  A feature allowing a subclass to inherit from multiple immediate subclasses simultaneously.
 
 Composition:
+  The method of including user defined object types as part of a newly defined objects, bypassing the need for inheritance.
