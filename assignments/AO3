@@ -26,7 +26,7 @@ Overloading:
   to allow for the input of many different data types.
 
 Attributes/Properties:
- 
+ The allowance for and application of data within a class.
 
 Class Variable:
   A variable shared by all instances of a class.
@@ -35,7 +35,7 @@ Instance Variable:
   An internal variable maintained by a specific instance of a class.
 
 Member Variable:
-  
+  A variable used to refer to a specific object. 
 
 Inheritance:
   The property of objects allowing them to access data and methods from previously defined classes.
