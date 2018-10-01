@@ -20,10 +20,10 @@ int main() {
 
 	cout << V1 << endl;
 	cout << V2 << endl;
-	system("Pause");
-
+	system("pause");
 	myVector v3 = V1 + V2;
-
+	system("pause");
+	cout << v3 << endl;
 	// V.print();
 
 	// cout<<V.size()<<endl;
