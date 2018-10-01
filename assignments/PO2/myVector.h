@@ -18,6 +18,7 @@ public:
 	int popBack();
 	int getValue(int index);
 	void setValue(int index, int value);
+	void incrValue(int index, int value);
 	double percentFull();
 	int* resize(double);
 	int* resize(int);
@@ -61,117 +62,167 @@ public:
 		int rhsSize = rhs.index;
 		int lhsSize = index;
 		int max = 0;
+    int min = 0;
 
 		// which vector is bigger?
-		if (rhsSize > lhsSize)
+		if (rhsSize > lhsSize) {
 			max = rhsSize;
-		else
+      min = lhsSize;
+		}
+		else {
 			max = lhsSize;
+      min = rhsSize;
+		}
 
 		// create a new vector with the bigger size
 		myVector newVector(max);
-
-		//Print that it really is the bigger of the two.
-		//Don't do this in your program!
-		//cout << "newVector size: " << newVector.maxSize << endl;
-
-
-		//For every value in the right hand size, add it to newVector
-		for (int i = rhsSize; i > 0; i--) {
-			newVector[i] = 0;
-			newVector[i] += rhs[i];
+    for (int i = 0; i < min; i++) {
+      newVector.index++;
+			newVector.vPtr[i] += rhs.getValue(i);
+      newVector.vPtr[i] += getValue(i);
 		}
-
-		//For every value in the left hand size, add it to newVector
-		for (int i = lhsSize; i > 0; i--) {
-			newVector[i] += getValue(i);
-		}
-		// Of course, this doesn't have anything in it!
+    if(max == rhsSize){
+      for(int i = min; i < max; i++){
+        newVector.index++;
+        newVector.vPtr[i] += rhs.getValue(i);
+      }
+    }
+    else{
+      for(int i = min; i < max; i++){
+        newVector.index++;
+        newVector.vPtr[i] += getValue(i);
+      }
+    }
 		return newVector;
 	}
-	myVector operator-(myVector& rhs) {
+		myVector operator-(myVector& rhs) {
+
+		//rhs = vector on the right of the + sign
+		//lhs = THIS vector (the one were in)
+
 		int rhsSize = rhs.index;
 		int lhsSize = index;
 		int max = 0;
+    int min = 0;
 
-		if (rhsSize > lhsSize)
+		// which vector is bigger?
+		if (rhsSize > lhsSize) {
 			max = rhsSize;
-		else
+      min = lhsSize;
+		}
+		else {
 			max = lhsSize;
+      min = rhsSize;
+		}
 
+		// create a new vector with the bigger size
 		myVector newVector(max);
-
-		for (int i = lhsSize; i > 0; i--) {
-			newVector[i] = 0;
-			newVector[i] += getValue(i);
+    for (int i = 0; i < min; i++) {
+      newVector.index++;
+			newVector.vPtr[i] += rhs.getValue(i);
+      newVector.vPtr[i] -= getValue(i);
 		}
-
-		for (int i = rhsSize; i > 0; i--) {
-			newVector[i] -= rhs[i];
-		}
-
+    if(max == rhsSize){
+      for(int i = min; i < max; i++){
+        newVector.index++;
+        newVector.vPtr[i] += rhs.getValue(i);
+      }
+    }
+    else{
+      for(int i = min; i < max; i++){
+        newVector.index++;
+        newVector.vPtr[i] += getValue(i);
+      }
+    }
 		return newVector;
 	}
-
 	myVector operator*(myVector& rhs) {
+
+		//rhs = vector on the right of the + sign
+		//lhs = THIS vector (the one were in)
+
 		int rhsSize = rhs.index;
 		int lhsSize = index;
 		int max = 0;
+    int min = 0;
 
-		if (rhsSize > lhsSize)
+		// which vector is bigger?
+		if (rhsSize > lhsSize) {
 			max = rhsSize;
-		else
+      min = lhsSize;
+		}
+		else {
 			max = lhsSize;
-
-		myVector newVector(max);
-
-		for (int i = lhsSize; i > 0; i--) {
-			newVector[i] = 0;
-			newVector[i] += getValue(i);
+      min = rhsSize;
 		}
 
-		for (int i = rhsSize; i > 0; i--) {
-			newVector[i] *= rhs[i];
+		// create a new vector with the bigger size
+		myVector newVector(max);
+    for (int i = 0; i < min; i++) {
+      newVector.index++;
+			newVector.vPtr[i] += rhs.getValue(i);
+      newVector.vPtr[i] *= getValue(i);
 		}
 		return newVector;
 	}
 
-	myVector operator/(myVector& rhs) {
+  	myVector operator*(int rhs) {
+
+		myVector newVector(index);
+    for (int i = 0; i < index; i++){
+      newVector.index++;
+      newVector.vPtr[i] += getValue(i);
+      newVector.vPtr[i] *= rhs;
+    }
+		return newVector;
+	}
+
+		myVector operator/(myVector& rhs) {
+
+		//rhs = vector on the right of the + sign
+		//lhs = THIS vector (the one were in)
+
 		int rhsSize = rhs.index;
 		int lhsSize = index;
 		int max = 0;
+    int min = 0;
 
-		if (rhsSize > lhsSize)
+		// which vector is bigger?
+		if (rhsSize > lhsSize) {
 			max = rhsSize;
-		else
+      min = lhsSize;
+		}
+		else {
 			max = lhsSize;
-
-		myVector newVector(max);
-
-		for (int i = lhsSize; i > 0; i--) {
-			newVector[i] = 0;
-			newVector[i] += getValue(i);
+      min = rhsSize;
 		}
 
-		for (int i = rhsSize; i > 0; i--) {
-			newVector[i] /= rhs[i];
+		// create a new vector with the bigger size
+		myVector newVector(max);
+    for (int i = 0; i < min; i++) {
+      newVector.index++;
+			newVector.vPtr[i] += rhs.getValue(i);
+      newVector.vPtr[i] /= getValue(i);
 		}
 		return newVector;
 	}
 
-	myVector operator==(myVector& rhs) {
-		int rhsSize = rhs.index;
-		int lhsSize = index;
-		if (rhsSize != lhsSize) {
-			return false;
-		}
-		for (int i = 0; i < lhsSize; i++) {
-			if (getValue(i) != rhs[i]) {
-				return false;
-			}
-		}
-		return true;
-	}
+  bool operator==(myVector& rhs){
+    int rhsSize = rhs.index;
+    int lhsSize = index;
+
+    if (rhsSize != lhsSize){
+      return false;
+    }
+    else{
+      for(int i = 0; i < rhsSize; i++){
+        if (rhs.getValue(i) != getValue(i)){
+          return false;
+        }
+      }
+    }
+    return true;
+  }
 
 	myVector operator=(myVector& rhs) {
 		int rhsSize = rhs.index;
@@ -183,9 +234,13 @@ public:
 		else
 			max = lhsSize;
 
+		myVector newVector(max);
+
 		for (int i = 0; i < max; i++) {
-			setValue(i, rhs[i]);
+			setValue(i, rhs.getValue(i));
 		}
+
+		return newVector;
 	}
 };
 
@@ -272,6 +327,13 @@ void myVector::setValue(int index, int value) {
 		cout << "Error! No memory at given address!" << endl;
 	}
 	vPtr[index] = value;
+}
+
+void myVector::incrValue(int index, int value) {
+	if (index < 0) {
+		cout << "Error! No memory at given address!" << endl;
+	}
+	vPtr[index] += value;
 }
 /**
 * Function resize
