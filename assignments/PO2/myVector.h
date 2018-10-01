@@ -14,8 +14,10 @@ private:
 public:
 	myVector(int size);
 	void pushBack(int item);
-	void pushBack(int *, int size);
+	void pushBack(int *ptr, int size);
 	int popBack();
+	int getValue(int index);
+	void setValue(int index, int value);
 	double percentFull();
 	int* resize(double);
 	int* resize(int);
@@ -51,7 +53,7 @@ public:
 	// EXAMPLE: Not a working example. 
 	// Just shows how to choose the larger of two vectors and prints its size.
 	// It does NOT really add to vectors (thats your job).
-	myVector operator+(const myVector& rhs) {
+	myVector operator+(myVector& rhs) {
 
 		//rhs = vector on the right of the + sign
 		//lhs = THIS vector (the one were in)
@@ -71,14 +73,122 @@ public:
 
 		//Print that it really is the bigger of the two.
 		//Don't do this in your program!
-		cout << "newVector size: " << newVector.maxSize << endl;
+		//cout << "newVector size: " << newVector.maxSize << endl;
 
+
+		//For every value in the right hand size, add it to newVector
+		for (int i = rhsSize; i > 0; i--) {
+			newVector[i] = 0;
+			newVector[i] += rhs[i];
+		}
+
+		//For every value in the left hand size, add it to newVector
+		for (int i = lhsSize; i > 0; i--) {
+			newVector[i] += getValue(i);
+		}
 		// Of course, this doesn't have anything in it!
 		return newVector;
 	}
+	myVector operator-(myVector& rhs) {
+		int rhsSize = rhs.index;
+		int lhsSize = index;
+		int max = 0;
 
+		if (rhsSize > lhsSize)
+			max = rhsSize;
+		else
+			max = lhsSize;
 
+		myVector newVector(max);
+
+		for (int i = lhsSize; i > 0; i--) {
+			newVector[i] = 0;
+			newVector[i] += getValue(i);
+		}
+
+		for (int i = rhsSize; i > 0; i--) {
+			newVector[i] -= rhs[i];
+		}
+
+		return newVector;
+	}
+
+	myVector operator*(myVector& rhs) {
+		int rhsSize = rhs.index;
+		int lhsSize = index;
+		int max = 0;
+
+		if (rhsSize > lhsSize)
+			max = rhsSize;
+		else
+			max = lhsSize;
+
+		myVector newVector(max);
+
+		for (int i = lhsSize; i > 0; i--) {
+			newVector[i] = 0;
+			newVector[i] += getValue(i);
+		}
+
+		for (int i = rhsSize; i > 0; i--) {
+			newVector[i] *= rhs[i];
+		}
+		return newVector;
+	}
+
+	myVector operator/(myVector& rhs) {
+		int rhsSize = rhs.index;
+		int lhsSize = index;
+		int max = 0;
+
+		if (rhsSize > lhsSize)
+			max = rhsSize;
+		else
+			max = lhsSize;
+
+		myVector newVector(max);
+
+		for (int i = lhsSize; i > 0; i--) {
+			newVector[i] = 0;
+			newVector[i] += getValue(i);
+		}
+
+		for (int i = rhsSize; i > 0; i--) {
+			newVector[i] /= rhs[i];
+		}
+		return newVector;
+	}
+
+	myVector operator==(myVector& rhs) {
+		int rhsSize = rhs.index;
+		int lhsSize = index;
+		if (rhsSize != lhsSize) {
+			return false;
+		}
+		for (int i = 0; i < lhsSize; i++) {
+			if (getValue(i) != rhs[i]) {
+				return false;
+			}
+		}
+		return true;
+	}
+
+	myVector operator=(myVector& rhs) {
+		int rhsSize = rhs.index;
+		int lhsSize = index;
+		int max = 0;
+
+		if (rhsSize > lhsSize)
+			max = rhsSize;
+		else
+			max = lhsSize;
+
+		for (int i = 0; i < max; i++) {
+			setValue(i, rhs[i]);
+		}
+	}
 };
+
 
 
 /**
@@ -121,6 +231,13 @@ void myVector::pushBack(int item) {
 	vPtr[index++] = item;
 }
 
+void myVector::pushBack(int *ptr, int size) {
+	for (int i = 0; i < size; i++) {
+		pushBack(ptr[i]);
+		ptr++;
+		index++;
+	}
+}
 /**
 * Function popBack
 *   Returns value from vector
@@ -132,7 +249,7 @@ int myVector::popBack() {
 	index--;
 
 	if (index < 0) {
-		//dammit
+		return 0;
 	}
 
 	if (percentFull() <= .4) {
@@ -142,6 +259,20 @@ int myVector::popBack() {
 	return vPtr[index];
 }
 
+int myVector::getValue(int index) {
+	if (index < 0) {
+		cout << "Error! No value at input index!" << endl;
+		return 0;
+	}
+	return vPtr[index];
+}
+
+void myVector::setValue(int index, int value) {
+	if (index < 0) {
+		cout << "Error! No memory at given address!" << endl;
+	}
+	vPtr[index] = value;
+}
 /**
 * Function resize
 *   Resizes our vector based on passed in ratio
