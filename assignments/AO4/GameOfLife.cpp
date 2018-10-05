@@ -1,3 +1,13 @@
+/**
+*  Course: CMPS 2143 - OOP
+*  Assignment: AO4
+*  Purpose: Recreate Conway's Game of Life
+*
+*  @Author Ponyduelist003
+*  @Version 1.1 01/03/17
+*  @github repo: https://github.com/2143-OOP-Forsgren
+*/
+
 #include <SFML/Graphics.hpp>
 
 using namespace sf;
@@ -8,7 +18,13 @@ struct golCell {
 	RectangleShape Rect;
 	int Width;
 	int Height;
-
+	
+	/**
+	*  Establish a cell in the Game of Life
+	*
+	*  @param n/a
+	*  @return n/a
+	*/
 	golCell() {
 		Width = 10;
 		Height = 10;
@@ -17,7 +33,13 @@ struct golCell {
 		Rect.setOutlineColor(Color::Black);
 		Rect.setOutlineThickness(1);
 	}
-
+	
+	/**
+	*  Sets the position of the cell
+	*
+	*  @param {int} {int} x and y position of cell
+	*  @return n/a
+	*/
 	void setCellPos(int x, int y) {
 		Rect.setPosition(x*Width, y*Height);
 	}
@@ -31,6 +53,13 @@ struct gameOfLife {
 	int FrameRate;
 	RenderWindow Window;
 	golCell** World;
+	
+	/**
+	*  Establishes the board for the Game of Life
+	*
+	*  @param {int} {int} width and height of board
+	*  @return n/a
+	*/
 	gameOfLife(int width, int height) {
 		Width = width;
 		Height = height;
@@ -47,7 +76,13 @@ struct gameOfLife {
 			}
 		}
 	}
-
+	
+	/**
+	*  Draws the world for the Game of Life
+	*
+	*  @param n/a
+	*  @return n/a
+	*/
 	void drawWorld() {
 		Window.clear();
 		for (int i = 0; i < Height; i++) {
