@@ -72,7 +72,7 @@ struct gameOfLife {
 			// Loop through the line and insert a 
 			// char at a time into the array
 			for (int j = 0; j < Cols; j++) {
-				tempWorld[i][j].isAlive = line[j] - 48;
+				tempWorld[i][j].isAlive = (line[j] == '1');
 				World[i][j].isAlive = tempWorld[i][j].isAlive;
 			}
 		}
@@ -166,8 +166,11 @@ struct gameOfLife {
 					if (World[j][k].neighborCount < 2) {
 						World[j][k].isAlive = false;
 					}
-					else if (World[j][k].neighborCount <= 3){
+					else if (World[j][k].neighborCount = 2 && World[j][k].isAlive){
 						World[j][k].isAlive = true;
+					}
+					else if (World[j][k].neighborCount = 3) {
+						World[j][j].isAlive = true;
 					}
 					else {
 						World[j][k].isAlive = false;
@@ -176,6 +179,21 @@ struct gameOfLife {
 			}
 		}
 
+	}
+
+	void printBoard(std::ofstream& outfile) {
+		outfile << "Griffin Forsgren\n";
+		for (int i = 0; i < Height; i++) {
+			for (int j = 0; j < Width; j++) {
+				if (World[i][j].isAlive) {
+					outfile << "1";
+				}
+				else {
+					outfile << "0";
+				}
+			}
+			outfile << "\n";
+		}
 	}
 };
 
@@ -189,19 +207,18 @@ int main() {
 	infile.open("filename.txt");
 	outfile.open("outfilename.txt");
 	Gol.initBoard(infile);
-	Gol.run(338);
 	while (Gol.Window.isOpen())
 	{
 		Event event;
 		while (Gol.Window.pollEvent(event))
 		{
+			Gol.run(1);
 			Gol.drawWorld();
+			system("pause");
 			if (event.type == Event::Closed)
 				Gol.Window.close();
 		}
-
-
 	}
-
+	Gol.printBoard(outfile);
 	return 0;
 }
