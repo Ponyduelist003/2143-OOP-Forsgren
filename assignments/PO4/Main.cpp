@@ -32,7 +32,7 @@ struct gameOfLife {
 	int Height;
 	RenderWindow Window;
 	golCell** World;
-	gameOfLife(int width, int height) {
+	gameOfLife(int height, int width) {
 		Width = width;
 		Height = height;
 		Window.create(VideoMode(Width, Height), "Game of Life");
@@ -53,7 +53,7 @@ struct gameOfLife {
 		int Rows;
 		std::string line;
 		// Reads in first two numbers from first line
-		infile >> Cols >> Rows;
+		infile >> Rows >> Cols;
 
 		// Dynamically allocate proper number of rows
 		World = new golCell*[Rows];
@@ -134,7 +134,7 @@ struct gameOfLife {
 	void run(int iteration) {
 		for (int i = 0; i < iteration; i++) {
 			updateNeighbors();
-			for (int j = 0; i < Height; j++) {
+			for (int j = 0; j < Height; j++) {
 				for (int k = 0; k < Width; k++) {
 					if (World[j][k].neighborCount < 2) {
 						World[j][k].isAlive = false;
@@ -156,7 +156,7 @@ struct gameOfLife {
 
 int main() {
 
-	gameOfLife Gol(1000, 1000);
+	gameOfLife Gol(600, 600);
 	std::ifstream infile;
 	std::ofstream outfile;
 	infile.open("filename.txt");
