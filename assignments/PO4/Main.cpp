@@ -32,6 +32,7 @@ struct gameOfLife {
 	int Height;
 	RenderWindow Window;
 	golCell** World;
+	golCell** tempWorld;
 	gameOfLife(int height, int width) {
 		Width = width;
 		Height = height;
@@ -56,11 +57,11 @@ struct gameOfLife {
 		infile >> Rows >> Cols;
 
 		// Dynamically allocate proper number of rows
-		World = new golCell*[Rows];
+		tempWorld = new golCell*[Rows];
 
 		// Dynamically allocate proper number of cols
 		for (int i = 0; i < Rows; i++) {
-			World[i] = new golCell[Cols];
+			tempWorld[i] = new golCell[Cols];
 		}
 
 		// Now Let's read rest of file (0's and 1's)
@@ -71,7 +72,8 @@ struct gameOfLife {
 			// Loop through the line and insert a 
 			// char at a time into the array
 			for (int j = 0; j < Cols; j++) {
-				World[i][j].isAlive = line[j] - 48;
+				tempWorld[i][j].isAlive = line[j] - 48;
+				World[i][j].isAlive = tempWorld[i][j].isAlive;
 			}
 		}
 	}
@@ -81,7 +83,9 @@ struct gameOfLife {
 		Window.clear();
 		for (int i = 0; i < Height; i++) {
 			for (int j = 0; j < Width; j++) {
-				Window.draw(World[i][j].Rect);
+				if (World[i][j].isAlive) {
+					Window.draw(World[i][j].Rect);
+				}
 			}
 		}
 		Window.display();
