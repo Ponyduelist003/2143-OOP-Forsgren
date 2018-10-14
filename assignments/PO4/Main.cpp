@@ -87,32 +87,42 @@ struct gameOfLife {
 		Window.display();
 	}
 
+	bool onWorld(int height, int width) {
+		if (height < 0 || height >= Height) {
+			return false;
+		}
+		if (width < 0 || width >= Width) {
+			return false;
+		}
+		return true;
+	}
+
 	void updateNeighbors() {
 		int tempNeighbors = 0;
 		for (int i = 0; i < Height; i++) {
 			for (int j = 0; j < Width; j++) {
-				if (i - 1 >= 0 && j - 1 >= 0 && World[i - 1][j - 1].isAlive) {
+				if (onWorld(i - 1, j - 1) && World[i - 1][j - 1].isAlive) {
 					tempNeighbors++;
 				}
-				if (i - 1 >= 0 && World[i - 1][j].isAlive) {
+				if (onWorld(i - 1, j) && World[i - 1][j].isAlive) {
 					tempNeighbors++;
 				}
-				if (i - 1 >= 0 && j + 1 < Width && World[i - 1][j + 1].isAlive) {
+				if (onWorld(i - 1, j + 1) && World[i - 1][j + 1].isAlive) {
 					tempNeighbors++;
 				}
-				if (j - 1 >= 0 && World[i][j - 1].isAlive) {
+				if (onWorld(i, j - 1) && World[i][j - 1].isAlive) {
 					tempNeighbors++;
 				}
-				if (j + 1 < Width && World[i][j + 1].isAlive) {
+				if (onWorld(i, j + 1) && World[i][j + 1].isAlive) {
 					tempNeighbors++;
 				}
-				if (i + 1 < Height && j - 1 >= 0 && World[i + 1][j - 1].isAlive) {
+				if (onWorld(i + 1, j - 1) && World[i + 1][j - 1].isAlive) {
 					tempNeighbors++;
 				}
-				if (i + 1 < Height && World[i + 1][j].isAlive) {
+				if (onWorld(i + 1, j) && World[i + 1][j].isAlive) {
 					tempNeighbors++;
 				}
-				if (i + 1 < Height && j + 1 < Width && World[i + 1][j + 1].isAlive) {
+				if (onWorld(i + 1, j + 1) && World[i + 1][j + 1].isAlive) {
 					tempNeighbors++;
 				}
 				World[i][j].neighborCount = tempNeighbors;
