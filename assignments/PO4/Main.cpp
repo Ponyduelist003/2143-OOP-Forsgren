@@ -88,10 +88,17 @@ struct gameOfLife {
 	}
 
 	bool onWorld(int height, int width) {
-		if (height < 0 || height >= Height) {
+		if (height < 0 ) {
 			return false;
 		}
-		if (width < 0 || width >= Width) {
+		else if (height >= Height) {
+			return false;
+		}
+
+		if (width < 0) {
+			return false;
+		}
+		else if (width >= Width) {
 			return false;
 		}
 		return true;
@@ -101,29 +108,45 @@ struct gameOfLife {
 		int tempNeighbors = 0;
 		for (int i = 0; i < Height; i++) {
 			for (int j = 0; j < Width; j++) {
-				if (onWorld(i - 1, j - 1) && World[i - 1][j - 1].isAlive) {
-					tempNeighbors++;
+				if (onWorld(i - 1, j - 1)) {
+					if (World[i - 1][j - 1].isAlive) {
+						tempNeighbors++;
+					}
 				}
-				if (onWorld(i - 1, j) && World[i - 1][j].isAlive) {
-					tempNeighbors++;
+				if (onWorld(i - 1, j)) {
+					if (World[i - 1][j].isAlive) {
+						tempNeighbors++;
+					}
 				}
-				if (onWorld(i - 1, j + 1) && World[i - 1][j + 1].isAlive) {
-					tempNeighbors++;
+				if (onWorld(i - 1, j + 1)) {
+					if (World[i - 1][j + 1].isAlive) {
+						tempNeighbors++;
+					}
 				}
-				if (onWorld(i, j - 1) && World[i][j - 1].isAlive) {
-					tempNeighbors++;
+				if (onWorld(i, j - 1)) {
+					if (World[i][j - 1].isAlive) {
+						tempNeighbors++;
+					}
 				}
-				if (onWorld(i, j + 1) && World[i][j + 1].isAlive) {
-					tempNeighbors++;
+				if (onWorld(i, j + 1)) {
+					if (World[i][j + 1].isAlive) {
+						tempNeighbors++;
+					}
 				}
-				if (onWorld(i + 1, j - 1) && World[i + 1][j - 1].isAlive) {
-					tempNeighbors++;
+				if (onWorld(i + 1, j - 1)) {
+					if (World[i + 1][j - 1].isAlive) {
+						tempNeighbors++;
+					}
 				}
-				if (onWorld(i + 1, j) && World[i + 1][j].isAlive) {
-					tempNeighbors++;
+				if (onWorld(i + 1, j)) {
+					if (World[i + 1][j].isAlive) {
+						tempNeighbors++;
+					}
 				}
-				if (onWorld(i + 1, j + 1) && World[i + 1][j + 1].isAlive) {
-					tempNeighbors++;
+				if (onWorld(i + 1, j + 1)) {
+					if (World[i + 1][j + 1].isAlive) {
+						tempNeighbors++;
+					}
 				}
 				World[i][j].neighborCount = tempNeighbors;
 				tempNeighbors = 0;
