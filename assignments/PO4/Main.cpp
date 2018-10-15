@@ -53,6 +53,8 @@ struct golCell {
 struct gameOfLife {
 	int Width;
 	int Height;
+	int FrameCount;
+	int FrameRate;
 	RenderWindow Window;
 	golCell** World;
 	golCell** tempWorld;
@@ -65,6 +67,8 @@ struct gameOfLife {
 	gameOfLife(int height, int width) {
 		Width = width;
 		Height = height;
+		FrameCount = 0;
+		FrameRate = 5;
 		Window.create(VideoMode(Width * 10, Height * 10), "Game of Life");
 
 		World = new golCell*[height];
@@ -301,9 +305,12 @@ int main() {
 		while (Gol.Window.pollEvent(event))
 		{
 			//draw the final result of the iterations
-			Gol.drawWorld();
-			if (event.type == Event::Closed)
+			if (Gol.FrameCount % Gol.FrameRate == 0) {
+				Gol.drawWorld();
+			}
+			else if (event.type == Event::Closed)
 				Gol.Window.close();
+			Gol.FrameCount++;
 		}
 	}
 
