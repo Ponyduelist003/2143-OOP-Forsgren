@@ -65,7 +65,7 @@ struct gameOfLife {
 	gameOfLife(int height, int width) {
 		Width = width;
 		Height = height;
-		Window.create(VideoMode(Width, Height), "Game of Life");
+		Window.create(VideoMode(Width * 10, Height * 10), "Game of Life");
 
 		World = new golCell*[height];
 
@@ -280,7 +280,7 @@ struct gameOfLife {
 
 int main() {
 	//declare a game of life board
-	gameOfLife Gol(50, 50);
+	gameOfLife Gol(40, 50);
 
 	//open infile and outfile
 	std::ifstream infile;
