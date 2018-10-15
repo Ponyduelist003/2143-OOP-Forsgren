@@ -1,3 +1,13 @@
+/*
+*  Course: CMPS 2143 - OOP
+*  Assignment: P04
+*  Purpose: Simulate Conway's Game of Life
+*
+*  @author Ponyduelist003
+*  @version 1.1 01/03/17
+*  @github repo: https://github.com/2143-OOP-Forsgren
+*/
+
 #include <SFML/Graphics.hpp>
 #include <fstream>
 #include <cstring>
@@ -11,7 +21,13 @@ struct golCell {
 	RectangleShape Rect;
 	int Width;
 	int Height;
-
+	
+	/**
+	*  Constructs a game of life cell
+	*
+	*  @param n/a
+	*  @return {golCell} defaultly constructed
+	*/
 	golCell() {
 		Width = 10;
 		Height = 10;
@@ -19,8 +35,15 @@ struct golCell {
 		Rect.setFillColor(Color::Green);
 		Rect.setOutlineColor(Color::Black);
 		Rect.setOutlineThickness(1);
+		neighborCount = 0;
 	}
 
+	/**
+	*  Sets the position of a game of life cell
+	*
+	*  @param {int} {int} x and y coordinates
+	*  @return n/a
+	*/
 	void setCellPos(int x, int y) {
 		Rect.setPosition(x*Width, y*Height);
 	}
@@ -33,6 +56,12 @@ struct gameOfLife {
 	RenderWindow Window;
 	golCell** World;
 	golCell** tempWorld;
+	/**
+	*  Constructs a board for the game of life
+	*
+	*  @param {int} {int} height and width of board
+	*  @return {gameOfLife} fully constructed
+	*/
 	gameOfLife(int height, int width) {
 		Width = width;
 		Height = height;
@@ -49,12 +78,18 @@ struct gameOfLife {
 		}
 	}
 
+	/**
+	*  Initializes the board for the game of life
+	*
+	*  @param {ifstream} infile for the game of life cell values
+	*  @return n/a
+	*/
 	void initBoard(std::ifstream &infile) {
 		int Cols;
 		int Rows;
 		std::string line;
 		// Reads in first two numbers from first line
-		infile >> Rows >> Cols;
+		infile >> Cols >> Rows;
 
 		// Dynamically allocate proper number of rows
 		tempWorld = new golCell*[Rows];
@@ -73,12 +108,17 @@ struct gameOfLife {
 			// char at a time into the array
 			for (int j = 0; j < Cols; j++) {
 				tempWorld[i][j].isAlive = (line[j] == '1');
-				World[i][j].isAlive = tempWorld[i][j].isAlive;
+				World[j][i].isAlive = tempWorld[i][j].isAlive;
 			}
 		}
 	}
 
-
+	/**
+	*  draw the board of the game of life in SFML
+	*
+	*  @param n/a
+	*  @return n/a
+	*/
 	void drawWorld() {
 		Window.clear();
 		for (int i = 0; i < Height; i++) {
@@ -91,7 +131,14 @@ struct gameOfLife {
 		Window.display();
 	}
 
+	/**
+	*  Check if a position is on the board
+	*
+	*  @param {int} {int} height and width position
+	*  @return {bool} whether or not position is on the board
+	*/
 	bool onWorld(int height, int width) {
+		//if height is less then 0 or greater than/equal to board's Height
 		if (height < 0 ) {
 			return false;
 		}
@@ -99,6 +146,7 @@ struct gameOfLife {
 			return false;
 		}
 
+		//if width is less then 0 or greater than/equal to board's Width
 		if (width < 0) {
 			return false;
 		}
@@ -108,83 +156,113 @@ struct gameOfLife {
 		return true;
 	}
 
+	/**
+	*  Updates the neighbor count for all cells on the board
+	*
+	*  @param n/a
+	*  @return n/a
+	*/
 	void updateNeighbors() {
-		int tempNeighbors = 0;
+		//for i going from 0 to height
 		for (int i = 0; i < Height; i++) {
+			//for j going from 0 to width
 			for (int j = 0; j < Width; j++) {
+				//make sure neighbor count is 0 to start
+				World[i][j].neighborCount = 0;
+
+				//check if each adjacent position is on board and if so, if the cell there is alive.
+				//if both are true, increment neighborCount
 				if (onWorld(i - 1, j - 1)) {
 					if (World[i - 1][j - 1].isAlive) {
-						tempNeighbors++;
+						World[i][j].neighborCount++;
 					}
 				}
 				if (onWorld(i - 1, j)) {
 					if (World[i - 1][j].isAlive) {
-						tempNeighbors++;
+						World[i][j].neighborCount++;
 					}
 				}
 				if (onWorld(i - 1, j + 1)) {
 					if (World[i - 1][j + 1].isAlive) {
-						tempNeighbors++;
+						World[i][j].neighborCount++;
 					}
 				}
 				if (onWorld(i, j - 1)) {
 					if (World[i][j - 1].isAlive) {
-						tempNeighbors++;
+						World[i][j].neighborCount++;
 					}
 				}
 				if (onWorld(i, j + 1)) {
 					if (World[i][j + 1].isAlive) {
-						tempNeighbors++;
+						World[i][j].neighborCount++;
 					}
 				}
 				if (onWorld(i + 1, j - 1)) {
 					if (World[i + 1][j - 1].isAlive) {
-						tempNeighbors++;
+						World[i][j].neighborCount++;
 					}
 				}
 				if (onWorld(i + 1, j)) {
 					if (World[i + 1][j].isAlive) {
-						tempNeighbors++;
+						World[i][j].neighborCount++;
 					}
 				}
 				if (onWorld(i + 1, j + 1)) {
 					if (World[i + 1][j + 1].isAlive) {
-						tempNeighbors++;
+						World[i][j].neighborCount++;
 					}
 				}
-				World[i][j].neighborCount = tempNeighbors;
-				tempNeighbors = 0;
 			}
 		}
 	}
 
+	/**
+	*  runs the game of life for a number of iterations
+	*
+	*  @param {int} iterations of the game of life
+	*  @return n/a
+	*/
 	void run(int iteration) {
+		//for every iteration
 		for (int i = 0; i < iteration; i++) {
+			//update the neighbor count
 			updateNeighbors();
+			//for j going from 0 to height
 			for (int j = 0; j < Height; j++) {
+				//for k going from 0 to width
 				for (int k = 0; k < Width; k++) {
+					//if a cell has less than 2 neighbors, it dies
 					if (World[j][k].neighborCount < 2) {
 						World[j][k].isAlive = false;
 					}
-					else if (World[j][k].neighborCount = 2 && World[j][k].isAlive){
+					//if a cell has exactly 3 neighbors, it comes to life
+					else if (World[j][k].neighborCount == 3) {
 						World[j][k].isAlive = true;
 					}
-					else if (World[j][k].neighborCount = 3) {
-						World[j][j].isAlive = true;
-					}
-					else {
+					//if a cell has more than 3 neighbors, it dies
+					else if (World[j][k].neighborCount > 3){
 						World[j][k].isAlive = false;
 					}
+					//if a cell falls under none of these (i.e. has 2 neighbors), it is unchanged.
 				}
 			}
 		}
 
 	}
-
+	/**
+	*  prints the board of the game of life to an outfile
+	*
+	*  @param {ofstream} outfile to print to
+	*  @return n/a
+	*/
 	void printBoard(std::ofstream& outfile) {
+		//print name first
 		outfile << "Griffin Forsgren\n";
+		//for i going from 0 to height
 		for (int i = 0; i < Height; i++) {
+			//for j going from 0 to width
 			for (int j = 0; j < Width; j++) {
+				//if the cell is alive, outfile 1. If the cell is dead, outfile 0.
 				if (World[i][j].isAlive) {
 					outfile << "1";
 				}
@@ -192,6 +270,7 @@ struct gameOfLife {
 					outfile << "0";
 				}
 			}
+			//outfile end of line before going to next row
 			outfile << "\n";
 		}
 	}
@@ -200,25 +279,39 @@ struct gameOfLife {
 
 
 int main() {
+	//declare a game of life board
+	gameOfLife Gol(50, 50);
 
-	gameOfLife Gol(600, 600);
+	//open infile and outfile
 	std::ifstream infile;
 	std::ofstream outfile;
 	infile.open("filename.txt");
 	outfile.open("outfilename.txt");
+
+	//initialize the board
 	Gol.initBoard(infile);
+
+	//run the board for 338 iterations
+	Gol.run(338);
+
+	//while the window is open
 	while (Gol.Window.isOpen())
 	{
 		Event event;
 		while (Gol.Window.pollEvent(event))
 		{
-			Gol.run(1);
+			//draw the final result of the iterations
 			Gol.drawWorld();
-			system("pause");
 			if (event.type == Event::Closed)
 				Gol.Window.close();
 		}
 	}
+
+	//print the result to an oufile
 	Gol.printBoard(outfile);
+
+	//close the file streams
+	infile.close();
+	outfile.close();
 	return 0;
 }
