@@ -10,6 +10,8 @@ class Counter {
 	Time start;
 	Time end;
 	Time elapsed;
+	int startHolder;
+	int endHolder;
 
 public:
 
@@ -20,16 +22,24 @@ public:
 	Time getStart();
 	Time getEnd();
 	void setElapsed();
+	bool isFinished();
+	void decrement();
+	void increment();
+	void reset();
 };
 
 Counter::Counter() {
 	start = seconds(0);
 	end = seconds(0);
+	startHolder = 0;
+	endHolder = 0;
 }
 
 Counter::Counter(int s, int e) {
 	start = seconds(s);
 	end = seconds(e);
+	startHolder = s;
+	endHolder = e;
 }
 
 Clock Counter::getClock() {
@@ -52,18 +62,37 @@ void Counter::setElapsed() {
 	elapsed = clock.getElapsedTime();
 }
 
+bool Counter::isFinished() {
+	return start.asSeconds() - elapsed.asSeconds() <= end.asSeconds();
+}
+
+void Counter::decrement() {
+	if (end >= start) {
+		std::cout << "Error! Attempt to decrement when Start is less than End!" << std::endl;
+	}
+	std::cout << "Decrementing Clock: " << (int) (start.asSeconds() - elapsed.asSeconds()) << std::endl;
+}
+
+void Counter::increment() {
+	if (end <= start) {
+		std::cout << "Error! Attempt to increment when Start is greater than End!" << std::endl;
+	}
+	std::cout << "Incrementing Clock: " << (int)elapsed.asSeconds() << std::endl;
+}
+
+void Counter::reset() {
+	clock.restart();
+	start = seconds(startHolder);
+	end = seconds(endHolder);
+	elapsed = clock.getElapsedTime();
+}
 int main()
 {
 	sf::RenderWindow window(sf::VideoMode(200, 200), "SFML works!");
 
-	//sf::Clock clock;
-	//sf::Time start;
-	//sf::Time end;
-	//sf::Time elapsed;
-	//start = sf::seconds(50);
-	//end = sf::seconds(50);
+	Counter myClock1(5, 0); // start at 5 and decrement to 0
 
-	Counter counter(5, 5);
+	Counter myClock2(0, 5); // start at 0 and increment to 5
 
 	while (window.isOpen())
 	{
@@ -74,17 +103,26 @@ int main()
 				window.close();
 		}
 
-		counter.setElapsed();
-		std::cout << "Incrementing Clock: " << (int) counter.getElapsed().asSeconds()<< std::endl;
-
-		counter.getElapsed() = counter.getClock().getElapsedTime();
-		std::cout << "Decrementing Clock: " << (int) (counter.getStart().asSeconds() - counter.getElapsed().asSeconds()) << std::endl;
-		if (counter.getStart().asSeconds() - counter.getElapsed().asSeconds() <= 0) {
-			window.close();
-		}
 		window.clear();
-		//window.draw(shape);
+
+		Font font;
+		font.loadFromFile("Segment7Standard.otf");
+
+		Text text;
+		text.setFont(font);
+		text.setCharacterSize(24);
+		text.setFillColor(sf::Color::Red);
+
 		window.display();
+		myClock1.setElapsed();
+		myClock1.decrement();
+		window.draw(text);
+
+		//myClock2.setElapsed();
+		//myClock2.increment();
+		if (myClock1.isFinished()) {
+			myClock1.reset();
+		}
 	}
 
 	return 0;
