@@ -17,6 +17,7 @@ class Counter {
 public:
 
 	Counter();
+	Counter(int t);
 	Counter(int s, int e);
 	Clock getClock();
 	Time getElapsed();
@@ -36,9 +37,41 @@ Counter::Counter() {
 	endHolder = 0;
 }
 
+Counter::Counter(int t) {
+	char response;
+	if (t == 0) {
+		start = seconds(t);
+		end = seconds(3600);
+	}
+	else {
+		std::cout << "Do you want to increment (I) or decrement (D)?" << std::endl;
+		std::cin >> response;
+		while (response != 'I' && response != 'D') {
+			if (response != 'I' && response != 'D') {
+				std::cout << "Please type I for increment or D for decrement..." << std::endl;
+				std::cin >> response;
+			}
+			else if (response == 'I') {
+				start = seconds(t);
+				end = seconds(3600);
+			}
+			else {
+				start = seconds(t);
+				end = seconds(-3600);
+			}
+		}
+	}
+}
+
 Counter::Counter(int s, int e) {
-	start = seconds(s);
-	end = seconds(e);
+	if (s > e) {
+		start = seconds(s + 1);
+		end = seconds(e);
+	}
+	else {
+		start = seconds(s);
+		end = seconds(e + 1);
+	}
 	startHolder = s;
 	endHolder = e;
 }
@@ -64,14 +97,17 @@ void Counter::setElapsed() {
 }
 
 bool Counter::isFinished() {
-	return start.asSeconds() - elapsed.asSeconds() <= end.asSeconds();
+	if (start > end) {
+		return start.asSeconds() - elapsed.asSeconds() <= end.asSeconds();
+	}
+	return start.asSeconds() + elapsed.asSeconds() >= end.asSeconds();
 }
 
 void Counter::decrement() {
 	if (end >= start) {
 		std::cout << "Error! Attempt to decrement when Start is less than End!" << std::endl;
 	}
-	std::cout << "Decrementing Clock: " << (int) (start.asSeconds() - elapsed.asSeconds()) + 1 << std::endl;
+	std::cout << "Decrementing Clock: " << (int) (start.asSeconds() - elapsed.asSeconds()) << std::endl;
 }
 
 void Counter::increment() {
@@ -87,6 +123,7 @@ void Counter::reset() {
 	end = seconds(endHolder);
 	elapsed = clock.getElapsedTime();
 }
+
 int main()
 {
 	RenderWindow window(VideoMode(200, 200), "SFML works!");
@@ -94,6 +131,8 @@ int main()
 	Counter myClock1(5, 0); // start at 5 and decrement to 0
 
 	Counter myClock2(0, 5); // start at 0 and increment to 5
+
+	Counter myClock3(5);
 
 	Font font;
 	font.loadFromFile("Segment7Standard.otf");
@@ -105,7 +144,7 @@ int main()
 	text.setPosition(50, 50);
 	text.setCharacterSize(24);
 	text.setFillColor(Color::Red);
-
+	int flag = 0;
 	while (window.isOpen())
 	{
 		Event event;
@@ -117,20 +156,27 @@ int main()
 
 		window.clear();
 
-		myClock1.setElapsed();
-		myClock1.decrement();
-		text.setString(std::to_string((int)(myClock1.getStart().asSeconds() - myClock1.getElapsed().asSeconds()) + 1));
-		window.draw(text);
-		window.display();
-
-		
-		if (myClock1.isFinished()) {
-			myClock2.setElapsed();
-			myClock2.increment();
-			text.setString(std::to_string((int)myClock1.getElapsed().asSeconds() + 1));
-			window.clear(Color::Black);
+		if (!myClock1.isFinished()) {
+			myClock1.setElapsed();
+			myClock1.decrement();
+			text.setString(std::to_string((int)(myClock1.getStart().asSeconds() - myClock1.getElapsed().asSeconds())));
 			window.draw(text);
 			window.display();
+		}
+		else{
+			myClock2.setElapsed();
+			myClock2.increment();
+			while (flag == 0) {
+				myClock2.reset();
+				flag++;
+			}
+			text.setString(std::to_string((int)myClock2.getElapsed().asSeconds()));
+			window.clear();
+			window.draw(text);
+			window.display();
+			if (myClock2.isFinished()) {
+				window.close();
+			}
 		}
 	}
 
