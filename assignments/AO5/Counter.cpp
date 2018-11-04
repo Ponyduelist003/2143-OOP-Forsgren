@@ -1,5 +1,6 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
+#include <cstring>
 
 // https://www.sfml-dev.org/tutorials/2.5/system-time.php
 
@@ -70,7 +71,7 @@ void Counter::decrement() {
 	if (end >= start) {
 		std::cout << "Error! Attempt to decrement when Start is less than End!" << std::endl;
 	}
-	std::cout << "Decrementing Clock: " << (int) (start.asSeconds() - elapsed.asSeconds()) << std::endl;
+	std::cout << "Decrementing Clock: " << (int) (start.asSeconds() - elapsed.asSeconds()) + 1 << std::endl;
 }
 
 void Counter::increment() {
@@ -88,40 +89,48 @@ void Counter::reset() {
 }
 int main()
 {
-	sf::RenderWindow window(sf::VideoMode(200, 200), "SFML works!");
+	RenderWindow window(VideoMode(200, 200), "SFML works!");
 
 	Counter myClock1(5, 0); // start at 5 and decrement to 0
 
 	Counter myClock2(0, 5); // start at 0 and increment to 5
 
+	Font font;
+	font.loadFromFile("Segment7Standard.otf");
+
+	Text text;
+
+
+	text.setFont(font);
+	text.setPosition(50, 50);
+	text.setCharacterSize(24);
+	text.setFillColor(Color::Red);
+
 	while (window.isOpen())
 	{
-		sf::Event event;
+		Event event;
 		while (window.pollEvent(event))
 		{
-			if (event.type == sf::Event::Closed)
+			if (event.type == Event::Closed)
 				window.close();
 		}
 
 		window.clear();
 
-		Font font;
-		font.loadFromFile("Segment7Standard.otf");
-
-		Text text;
-		text.setFont(font);
-		text.setCharacterSize(24);
-		text.setFillColor(sf::Color::Red);
-
-		window.display();
 		myClock1.setElapsed();
 		myClock1.decrement();
+		text.setString(std::to_string((int)(myClock1.getStart().asSeconds() - myClock1.getElapsed().asSeconds()) + 1));
 		window.draw(text);
+		window.display();
 
-		//myClock2.setElapsed();
-		//myClock2.increment();
+		
 		if (myClock1.isFinished()) {
-			myClock1.reset();
+			myClock2.setElapsed();
+			myClock2.increment();
+			text.setString(std::to_string((int)myClock1.getElapsed().asSeconds() + 1));
+			window.clear(Color::Black);
+			window.draw(text);
+			window.display();
 		}
 	}
 
