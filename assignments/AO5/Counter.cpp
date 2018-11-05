@@ -228,8 +228,6 @@ int main()
 
 	Counter myClock2(0, 5); // start at 0 and increment to 5
 
-	//Counter myClock3(5);
-
 	//Load 7 Segment Font
 	Font font;
 	font.loadFromFile("Segment7Standard.otf");
@@ -241,8 +239,9 @@ int main()
 	text.setCharacterSize(50);
 	text.setFillColor(Color::Red);
 
-	//set a flag for later
+	//set flags for later
 	int flag = 0;
+	int flag2 = 0;
 
 	//while the window is open
 	while (window.isOpen())
@@ -271,7 +270,7 @@ int main()
 			window.display();
 		}
 		//else, start the second clock and put the int timer on window
-		else{
+		else if(!myClock2.isFinished()){
 			myClock2.setElapsed();
 			myClock2.increment();
 			//while flag is 0, reset elapsed time and increase flag
@@ -284,9 +283,6 @@ int main()
 			window.draw(text);
 			window.display();
 			//if second clock is finished, close window
-			if (myClock2.isFinished()) {
-				window.close();
-			}
 		}
 	}
 	return 0;
