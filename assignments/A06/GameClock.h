@@ -1,3 +1,13 @@
+/*
+* Course: CMPS 2143 - OOP
+* Assignment: A06 Bouncing Clock
+* Purpose: Create a clock that bounces off the walls of the window
+*
+* @author Ponyduelist003
+* @version 1.1 01/03/17
+* @github repo: https://github.com/2143-OOP-Forsgren
+*/
+
 #pragma once
 #pragma once
 #include <SFML/Graphics.hpp>
